@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Online Class Portal – VIPS.Tech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #f97316;
+      --success: #10b981;
+      --danger: #ef4444;
+      --dark-bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.8);
+      --card-border: rgba(71, 85, 105, 0.3);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6);
+      --gradient-secondary: linear-gradient(135deg, #f97316, #f59e0b);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 20%);
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+    }
+
+    .header-left h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #ffffff;        /* 👈 White color */
+  font-weight: 800;
+}
+
+
+    .tagline {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 10px 15px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      font-size: 0.9rem;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      margin-top: 10px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr);
+      gap: 25px;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.2);
+      color: #a7f3d0;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      white-space: nowrap;
+    }
+
+    .course-filter {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: rgba(30, 41, 59, 0.7);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .filter-btn:hover {
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--text-primary);
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .course-card {
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 14px;
+      padding: 18px;
+      border: 1px solid rgba(71, 85, 105, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .course-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.15);
+    }
+
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .course-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .course-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      flex-grow: 1;
+    }
+
+    .course-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+    }
+
+    .course-meta {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .student-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+      color: #a7f3d0;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 0.2s ease;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.9);
+      color: var(--text-primary);
+      border: 1px solid rgba(107, 114, 128, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(55, 65, 81, 1);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: rgba(220, 38, 38, 1);
+    }
+
+    .today-link {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      background: rgba(22, 163, 74, 0.15);
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+    }
+
+    .today-link a {
+      color: #86efac;
+      text-decoration: none;
+      font-weight: 600;
+      word-break: break-all;
+      display: block;
+      margin-top: 5px;
+    }
+
+    .today-link a:hover {
+      text-decoration: underline;
+      color: #bbf7d0;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #d1d5db;
+      padding: 8px 10px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 8px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .error {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #fecaca;
+      padding: 8px 10px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 8px;
+      border-left: 3px solid #ef4444;
+    }
+
+    .success {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #bbf7d0;
+      padding: 10px;
+      background: rgba(16, 185, 129, 0.15);
+      border-radius: 10px;
+      border-left: 3px solid #10b981;
+    }
+
+    .admin-login-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .admin-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .small {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(71, 85, 105, 0.5), transparent);
+      margin: 16px 0;
+    }
+
+    .course-category {
+      font-size: 0.8rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(99, 102, 241, 0.1);
+      color: #a5b4fc;
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    .course-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 10px;
+    }
+
+    .status-live {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+    }
+
+    .status-upcoming {
+      background: rgba(249, 115, 22, 0.15);
+      color: #fdba74;
+    }
+
+    .status-completed {
+      background: rgba(16, 185, 129, 0.15);
+      color: #a7f3d0;
+    }
+
+    .admin-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(71, 85, 105, 0.3);
+    }
+
+    .reset-btn {
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: var(--text-secondary);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <div class="header-left">
+        <h1><i class="fas fa-graduation-cap"></i> VIPS.Tech Class Portal</h1>
+        <div class="tagline">Daily links, passwords, and resources for all technical courses</div>
+        <div class="pill">
+          <i class="fas fa-user-shield"></i>
+          <span>Admin controls today's links & passwords</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-box">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>Courses: <span class="stat-value" id="totalCourses">9</span></span>
+        </div>
+        <div class="stat-box">
+          <i class="fas fa-users"></i>
+          <span>Active: <span class="stat-value" id="activeCourses">9</span></span>
+        </div>
+        <div class="stat-box">
+          <i class="fas fa-calendar-day"></i>
+          <span>Updated: <span class="stat-value" id="lastUpdate">Today</span></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- Student View -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-laptop-code"></i> Student Dashboard
+          </div>
+          <div class="badge">Enter password to access today's class</div>
+        </div>
+        <p class="small">
+          Select your course, enter today's password provided by your instructor, and access the class link and resources.
+        </p>
+
+        <div class="course-filter" id="courseFilter">
+          <button class="filter-btn active" data-filter="all">All Courses</button>
+          <button class="filter-btn" data-filter="development">Development</button>
+          <button class="filter-btn" data-filter="data-science">Data & AI</button>
+          <button class="filter-btn" data-filter="security">Security</button>
+        </div>
+
+        <div class="courses-grid" id="coursesContainer">
+          <!-- Course cards rendered by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Admin View -->
+      <aside class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-user-cog"></i> Admin Panel
+          </div>
+          <div class="badge">Restricted Access</div>
+        </div>
+
+        <div id="adminAuthSection">
+          <div class="admin-label">Admin Login</div>
+          <div class="admin-login-row">
+            <input
+              type="password"
+              id="adminPasswordInput"
+              placeholder="Enter admin password"
+            />
+            <button class="btn btn-primary" onclick="handleAdminLogin()">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+          </div>
+          <div class="small" style="margin-top:6px;">
+            Default password: <code>admin123</code> - Change in code for production
+          </div>
+          <div id="adminLoginError" class="error"></div>
+        </div>
+
+        <div id="adminFormSection" style="display:none; margin-top:15px;">
+          <div class="admin-label">Select Course / Batch</div>
+          <select id="adminCourseSelect" onchange="loadCourseForEdit()">
+            <!-- options via JS -->
+          </select>
+
+          <div class="divider"></div>
+
+          <label class="admin-label" for="todayLinkInput">
+            <i class="fas fa-link"></i> Today's Class Link
+          </label>
+          <input
+            type="url"
+            id="todayLinkInput"
+            placeholder="https://meet.google.com/..., Zoom, Teams, etc."
+          />
+
+          <label class="admin-label" for="todayPasswordInput">
+            <i class="fas fa-key"></i> Today's Class Password
+          </label>
+          <input
+            type="text"
+            id="todayPasswordInput"
+            placeholder="e.g., vips2023tech"
+          />
+
+          <label class="admin-label" for="todayNoteInput">
+            <i class="fas fa-sticky-note"></i> Today's Notes / Tasks
+          </label>
+          <textarea
+            id="todayNoteInput"
+            placeholder="Today's topic, assignment details, resources, etc."
+            rows="3"
+          ></textarea>
+
+          <label class="admin-label" for="studentCountInput">
+            <i class="fas fa-users"></i> Student Count (Optional)
+          </label>
+          <input
+            type="number"
+            id="studentCountInput"
+            placeholder="e.g., 25"
+            min="0"
+          />
+
+          <label class="admin-label" for="courseStatusSelect">
+            <i class="fas fa-circle"></i> Class Status
+          </label>
+          <select id="courseStatusSelect">
+            <option value="upcoming">Upcoming</option>
+            <option value="live">Live Now</option>
+            <option value="completed">Completed</option>
+          </select>
+
+          <div class="admin-controls">
+            <button class="btn btn-primary" onclick="saveCourseSettings()">
+              <i class="fas fa-save"></i> Save
+            </button>
+            <button class="btn btn-secondary" onclick="resetCourseSettings()">
+              <i class="fas fa-undo"></i> Reset
+            </button>
+          </div>
+
+          <button class="btn btn-danger reset-btn" onclick="handleAdminLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout Admin
+          </button>
+
+          <div id="adminSaveMessage" class="success"></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <p>VIPS.Tech Online Class Portal &copy; 2023 | For educational use only</p>
+      <p class="small">All course links and passwords are managed by authorized administrators</p>
+    </footer>
+  </div>
+
+  <script>
+    // ====== CONFIG ======
+    const ADMIN_PASSWORD = "admin123";
+    const COURSES = [
+      { 
+        name: "React JS", 
+        category: "development",
+        icon: "fab fa-react",
+        color: "#61DAFB",
+        defaultStudents: 28
+      },
+      { 
+        name: "Full Stack Development", 
+        category: "development",
+        icon: "fas fa-layer-group",
+        color: "#10B981",
+        defaultStudents: 32
+      },
+      { 
+        name: "AI & Machine Learning", 
+        category: "data-science",
+        icon: "fas fa-brain",
+        color: "#8B5CF6",
+        defaultStudents: 24
+      },
+      { 
+        name: "Web Development", 
+        category: "development",
+        icon: "fas fa-code",
+        color: "#F97316",
+        defaultStudents: 35
+      },
+      { 
+        name: "Data Structures & Algorithms", 
+        category: "data-science",
+        icon: "fas fa-project-diagram",
+        color: "#3B82F6",
+        defaultStudents: 40
+      },
+      { 
+        name: "Cloud Analytics", 
+        category: "data-science",
+        icon: "fas fa-cloud",
+        color: "#06B6D4",
+        defaultStudents: 22
+      },
+      { 
+        name: "Ethical Hacking & Cybersecurity", 
+        category: "security",
+        icon: "fas fa-shield-alt",
+        color: "#EF4444",
+        defaultStudents: 26
+      },
+      { 
+        name: "App Development", 
+        category: "development",
+        icon: "fas fa-mobile-alt",
+        color: "#8B5CF6",
+        defaultStudents: 30
+      },
+      { 
+        name: "Odoo Development", 
+        category: "development",
+        icon: "fas fa-cogs",
+        color: "#714B67",
+        defaultStudents: 18
+      }
+    ];
+    
+    const STORAGE_KEY = "vips_class_portal_data_enhanced";
+
+    // ====== STATE MANAGEMENT ======
+    let portalData = loadPortalData();
+    let isAdminLoggedIn = false;
+    let activeFilter = "all";
+
+    function loadPortalData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          const initial = {};
+          COURSES.forEach((course) => {
+            initial[course.name] = {
+              link: "",
+              password: "",
+              note: "",
+              studentCount: course.defaultStudents,
+              status: "upcoming",
+              updatedAt: ""
+            };
+          });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
+          return initial;
+        }
+        return JSON.parse(raw);
+      } catch (e) {
+        console.error("Error loading portal data:", e);
+        return {};
+      }
+    }
+
+    function savePortalData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(portalData));
+    }
+
+    // ====== STUDENT VIEW RENDER ======
+    function renderCoursesForStudents() {
+      const container = document.getElementById("coursesContainer");
+      const filteredCourses = COURSES.filter(course => {
+        if (activeFilter === "all") return true;
+        return course.category === activeFilter;
+      });
+
+      if (filteredCourses.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>No courses found</h3>
+            <p>No courses match the selected filter</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = "";
+
+      filteredCourses.forEach((course, index) => {
+        const data = portalData[course.name] || {};
+        const card = document.createElement("div");
+        card.className = "course-card";
+        card.dataset.category = course.category;
+
+        const statusClass = `status-${data.status || "upcoming"}`;
+        const statusText = data.status ? data.status.charAt(0).toUpperCase() + data.status.slice(1) : "Upcoming";
+
+        card.innerHTML = `
+          <div class="course-header">
+            <div class="course-name">${course.name}</div>
+            <div class="course-icon" style="background: rgba(${hexToRgb(course.color)}, 0.15); color: ${course.color}">
+              <i class="${course.icon}"></i>
+            </div>
+          </div>
+          
+          <div class="course-meta">
+            <div>
+              <i class="far fa-calendar"></i> 
+              ${data.updatedAt ? `Updated: ${data.updatedAt}` : "Not scheduled yet"}
+            </div>
+            <div class="student-count">
+              <i class="fas fa-user-graduate"></i> ${data.studentCount || course.defaultStudents}
+            </div>
+          </div>
+          
+          <div class="course-category">
+            ${course.category === "development" ? "Development" : 
+              course.category === "data-science" ? "Data Science & AI" : 
+              "Security"}
+          </div>
+          
+          <div class="course-status ${statusClass}">
+            <i class="fas fa-circle"></i> ${statusText}
+          </div>
+          
+          <div class="course-meta">
+            <i class="fas fa-key"></i> Enter today's password:
+          </div>
+          
+          <div class="input-group">
+            <input type="password" id="pwd-${index}" placeholder="Class password" />
+            <button class="btn btn-secondary" onclick="unlockCourse(${index})">
+              <i class="fas fa-unlock"></i> Unlock
+            </button>
+          </div>
+          
+          <div id="error-${index}" class="error" style="display: none;"></div>
+          <div id="content-${index}"></div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      // Update stats
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById("totalCourses").textContent = COURSES.length;
+      
+      let activeCount = 0;
+      COURSES.forEach(course => {
+        const data = portalData[course.name] || {};
+        if (data.link && data.password) activeCount++;
+      });
+      
+      document.getElementById("activeCourses").textContent = activeCount;
+      
+      // Find the most recent update
+      let lastUpdate = "Never";
+      COURSES.forEach(course => {
+        const data = portalData[course.name] || {};
+        if (data.updatedAt) {
+          if (lastUpdate === "Never" || new Date(data.updatedAt) > new Date(lastUpdate)) {
+            lastUpdate = data.updatedAt;
+          }
+        }
+      });
+      
+      document.getElementById("lastUpdate").textContent = lastUpdate !== "Never" ? lastUpdate.split(" ")[0] : "Never";
+    }
+
+    function unlockCourse(index) {
+      const course = COURSES.filter(c => {
+        if (activeFilter === "all") return true;
+        return c.category === activeFilter;
+      })[index];
+      
+      if (!course) return;
+      
+      const courseName = course.name;
+      const pwdInput = document.getElementById(`pwd-${index}`);
+      const contentDiv = document.getElementById(`content-${index}`);
+      const errorDiv = document.getElementById(`error-${index}`);
+
+      if (!pwdInput || !contentDiv || !errorDiv) return;
+
+      const entered = (pwdInput.value || "").trim();
+      const data = portalData[courseName] || {};
+
+      errorDiv.style.display = "none";
+      errorDiv.textContent = "";
+      contentDiv.innerHTML = "";
+
+      if (!data.password || !data.link) {
+        errorDiv.textContent = "Today's class link is not set yet. Please check with your instructor.";
+        errorDiv.style.display = "block";
+        return;
+      }
+
+      if (entered !== data.password) {
+        errorDiv.textContent = "Incorrect password. Please verify today's password with your instructor.";
+        errorDiv.style.display = "block";
+        return;
+      }
+
+      contentDiv.innerHTML = `
+        <div class="today-link">
+          <div><i class="fas fa-check-circle"></i> <strong>Today's Class Link:</strong></div>
+          <a href="${data.link}" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-external-link-alt"></i> ${data.link.length > 40 ? data.link.substring(0, 40) + "..." : data.link}
+          </a>
+          ${data.note ? `<div class="note"><i class="fas fa-sticky-note"></i> ${data.note}</div>` : ''}
+          <div class="course-meta" style="margin-top: 8px;">
+            <i class="fas fa-user-graduate"></i> ${data.studentCount || course.defaultStudents} students enrolled
+          </div>
+        </div>
+      `;
+    }
+
+    // ====== FILTERING ======
+    function setupFiltering() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.dataset.filter;
+          renderCoursesForStudents();
+        });
+      });
+    }
+
+    // ====== ADMIN AUTH ======
+    function handleAdminLogin() {
+      const input = document.getElementById("adminPasswordInput");
+      const errorDiv = document.getElementById("adminLoginError");
+      const adminForm = document.getElementById("adminFormSection");
+      const authSection = document.getElementById("adminAuthSection");
+
+      errorDiv.textContent = "";
+
+      if (!input) return;
+      const entered = (input.value || "").trim();
+
+      if (entered === ADMIN_PASSWORD) {
+        isAdminLoggedIn = true;
+        authSection.style.display = "none";
+        adminForm.style.display = "block";
+        populateAdminCourseSelect();
+        loadCourseForEdit();
+      } else {
+        errorDiv.textContent = "Incorrect admin password. Please try again.";
+      }
+    }
+
+    function handleAdminLogout() {
+      isAdminLoggedIn = false;
+      document.getElementById("adminAuthSection").style.display = "block";
+      document.getElementById("adminFormSection").style.display = "none";
+      document.getElementById("adminPasswordInput").value = "";
+      document.getElementById("adminLoginError").textContent = "";
+      document.getElementById("adminSaveMessage").textContent = "";
+    }
+
+    // ====== ADMIN FORM ======
+    function populateAdminCourseSelect() {
+      const select = document.getElementById("adminCourseSelect");
+      select.innerHTML = "";
+      COURSES.forEach((course) => {
+        const opt = document.createElement("option");
+        opt.value = course.name;
+        opt.textContent = course.name;
+        select.appendChild(opt);
+      });
+    }
+
+    function loadCourseForEdit() {
+      const select = document.getElementById("adminCourseSelect");
+      const courseName = select.value;
+      const data = portalData[courseName] || {};
+      const course = COURSES.find(c => c.name === courseName);
+
+      document.getElementById("todayLinkInput").value = data.link || "";
+      document.getElementById("todayPasswordInput").value = data.password || "";
+      document.getElementById("todayNoteInput").value = data.note || "";
+      document.getElementById("studentCountInput").value = data.studentCount || (course ? course.defaultStudents : 0);
+      document.getElementById("courseStatusSelect").value = data.status || "upcoming";
+      document.getElementById("adminSaveMessage").textContent = "";
+    }
+
+    function saveCourseSettings() {
+      const select = document.getElementById("adminCourseSelect");
+      const courseName = select.value;
+
+      const linkInput = document.getElementById("todayLinkInput");
+      const pwdInput = document.getElementById("todayPasswordInput");
+      const noteInput = document.getElementById("todayNoteInput");
+      const studentCountInput = document.getElementById("studentCountInput");
+      const statusSelect = document.getElementById("courseStatusSelect");
+      const msgDiv = document.getElementById("adminSaveMessage");
+
+      const link = (linkInput.value || "").trim();
+      const pwd = (pwdInput.value || "").trim();
+      const note = (noteInput.value || "").trim();
+      const studentCount = parseInt(studentCountInput.value) || 0;
+      const status = statusSelect.value;
+
+      if (!link || !pwd) {
+        msgDiv.textContent = "Please enter both today's link and password.";
+        msgDiv.style.color = "#fecaca";
+        return;
+      }
+
+      const now = new Date();
+      const formatted = 
+        now.getDate().toString().padStart(2, "0") + "/" +
+        (now.getMonth() + 1).toString().padStart(2, "0") + "/" +
+        now.getFullYear() + " " +
+        now.getHours().toString().padStart(2, "0") + ":" +
+        now.getMinutes().toString().padStart(2, "0");
+
+      portalData[courseName] = {
+        link: link,
+        password: pwd,
+        note: note,
+        studentCount: studentCount,
+        status: status,
+        updatedAt: formatted
+      };
+
+      savePortalData();
+      renderCoursesForStudents();
+
+      msgDiv.textContent = `Successfully updated ${courseName}! Students can now access today's link.`;
+      msgDiv.style.color = "#bbf7d0";
+    }
+
+    function resetCourseSettings() {
+      const select = document.getElementById("adminCourseSelect");
+      const courseName = select.value;
+      const course = COURSES.find(c => c.name === courseName);
+
+      portalData[courseName] = {
+        link: "",
+        password: "",
+        note: "",
+        studentCount: course ? course.defaultStudents : 0,
+        status: "upcoming",
+        updatedAt: ""
+      };
+
+      savePortalData();
+      loadCourseForEdit();
+      renderCoursesForStudents();
+
+      const msgDiv = document.getElementById("adminSaveMessage");
+      msgDiv.textContent = `Reset ${courseName} to default settings.`;
+      msgDiv.style.color = "#fca5a5";
+    }
+
+    // ====== HELPER FUNCTIONS ======
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? 
+        `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` 
+        : "99, 102, 241";
+    }
+
+    // ====== INIT ======
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCoursesForStudents();
+      setupFiltering();
+      
+      // Auto-focus password input on course card click
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('course-card')) {
+          const input = e.target.querySelector('input[type="password"]');
+          if (input) input.focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
