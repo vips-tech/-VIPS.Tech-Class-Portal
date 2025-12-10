@@ -12,6 +12,8 @@
       --secondary: #f97316;
       --success: #10b981;
       --danger: #ef4444;
+      --warning: #f59e0b;
+      --creative: #8b5cf6;
       --dark-bg: #0f172a;
       --card-bg: rgba(30, 41, 59, 0.8);
       --card-border: rgba(71, 85, 105, 0.3);
@@ -19,6 +21,7 @@
       --text-secondary: #94a3b8;
       --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6);
       --gradient-secondary: linear-gradient(135deg, #f97316, #f59e0b);
+      --gradient-creative: linear-gradient(135deg, #8b5cf6, #ec4899);
     }
 
     * {
@@ -55,12 +58,11 @@
     }
 
     .header-left h1 {
-  margin: 0;
-  font-size: 2rem;
-  color: #ffffff;        /* 👈 White color */
-  font-weight: 800;
-}
-
+      margin: 0;
+      font-size: 2rem;
+      color: #ffffff;
+      font-weight: 800;
+    }
 
     .tagline {
       font-size: 1rem;
@@ -488,6 +490,27 @@
       color: var(--text-secondary);
       opacity: 0.5;
     }
+
+    /* New category filter button styles */
+    .filter-btn.creative-filter {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .filter-btn.creative-filter.active {
+      background: var(--creative);
+      border-color: var(--creative);
+    }
+
+    .filter-btn.gamedev-filter {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .filter-btn.gamedev-filter.active {
+      background: var(--warning);
+      border-color: var(--warning);
+    }
   </style>
 </head>
 <body>
@@ -504,11 +527,11 @@
       <div class="header-stats">
         <div class="stat-box">
           <i class="fas fa-chalkboard-teacher"></i>
-          <span>Courses: <span class="stat-value" id="totalCourses">9</span></span>
+          <span>Courses: <span class="stat-value" id="totalCourses">11</span></span>
         </div>
         <div class="stat-box">
           <i class="fas fa-users"></i>
-          <span>Active: <span class="stat-value" id="activeCourses">9</span></span>
+          <span>Active: <span class="stat-value" id="activeCourses">11</span></span>
         </div>
         <div class="stat-box">
           <i class="fas fa-calendar-day"></i>
@@ -535,6 +558,8 @@
           <button class="filter-btn" data-filter="development">Development</button>
           <button class="filter-btn" data-filter="data-science">Data & AI</button>
           <button class="filter-btn" data-filter="security">Security</button>
+          <button class="filter-btn creative-filter" data-filter="ui-ux">UI/UX Design</button>
+          <button class="filter-btn gamedev-filter" data-filter="game-dev">Game Development</button>
         </div>
 
         <div class="courses-grid" id="coursesContainer">
@@ -713,6 +738,20 @@
         icon: "fas fa-cogs",
         color: "#714B67",
         defaultStudents: 18
+      },
+      { 
+        name: "UI/UX Design & Development", 
+        category: "ui-ux",
+        icon: "fas fa-palette",
+        color: "#EC4899",
+        defaultStudents: 25
+      },
+      { 
+        name: "Game Development", 
+        category: "game-dev",
+        icon: "fas fa-gamepad",
+        color: "#F59E0B",
+        defaultStudents: 20
       }
     ];
     
@@ -779,6 +818,13 @@
         card.className = "course-card";
         card.dataset.category = course.category;
 
+        // Set custom gradient for game dev and ui/ux courses
+        if (course.category === "game-dev") {
+          card.style.setProperty('--gradient-primary', 'linear-gradient(135deg, #f59e0b, #f97316)');
+        } else if (course.category === "ui-ux") {
+          card.style.setProperty('--gradient-primary', 'linear-gradient(135deg, #8b5cf6, #ec4899)');
+        }
+
         const statusClass = `status-${data.status || "upcoming"}`;
         const statusText = data.status ? data.status.charAt(0).toUpperCase() + data.status.slice(1) : "Upcoming";
 
@@ -803,7 +849,9 @@
           <div class="course-category">
             ${course.category === "development" ? "Development" : 
               course.category === "data-science" ? "Data Science & AI" : 
-              "Security"}
+              course.category === "security" ? "Security" :
+              course.category === "ui-ux" ? "UI/UX Design" :
+              "Game Development"}
           </div>
           
           <div class="course-status ${statusClass}">
